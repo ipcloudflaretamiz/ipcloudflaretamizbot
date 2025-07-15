@@ -69,8 +69,9 @@
     padding: 15px 25px;
     font-size: 1rem;
     border-radius: 8px;
-    border: 1px solid #8a2be2; /* Purple border */
-    background-color: #2e2e4a; /* Darker background */
+    border: 1px solid rgba(138, 43, 226, 0.5); /* Semi-transparent purple border */
+    background-color: rgba(46, 46, 74, 0.6); /* Semi-transparent dark background for glassy effect */
+    backdrop-filter: blur(8px); /* Blurry effect for buttons */
     color: #e0e0e0;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -83,7 +84,7 @@
   }
 
   button:hover {
-    background-color: #8a2be2; /* Purple on hover */
+    background-color: rgba(138, 43, 226, 0.8); /* More opaque purple on hover */
     color: white;
     transform: translateY(-2px);
   }
@@ -118,7 +119,8 @@
 
   .copy-btn {
     padding: 8px 15px;
-    background-color: #8a2be2; /* Purple background */
+    background-color: rgba(138, 43, 226, 0.7); /* Semi-transparent purple background for glassy effect */
+    backdrop-filter: blur(5px); /* Blurry effect for copy buttons */
     color: white;
     border: none;
     border-radius: 6px;
@@ -128,7 +130,7 @@
   }
 
   .copy-btn:hover {
-    background-color: #a052f2; /* Lighter purple on hover */
+    background-color: rgba(160, 82, 242, 0.9); /* More opaque lighter purple on hover */
     transform: scale(1.05);
   }
 
