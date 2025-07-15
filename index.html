@@ -3,38 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نمایش IPها</title>
+  <title>نمایش IPها و ساب‌دامنه‌ها</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; direction: rtl; }
-    #ipList { margin-top: 20px; }
-    .ip { padding: 10px; border: 1px solid #ccc; margin: 5px; display: inline-block; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      direction: rtl;
+    }
+    #selection, #list {
+      margin-top: 20px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin: 5px 0;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .item-text {
+      flex-grow: 1;
+      text-align: right;
+    }
+    .copy-btn {
+      padding: 5px 10px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+    }
+    .copy-btn:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
-  <h1>لیست IPها</h1>
-  <div id="ipList"></div>
+  <h1>نمایش IPها و ساب‌دامنه‌ها</h1>
+  <div id="selection">
+    <select id="dataType">
+      <option value="">انتخاب کنید</option>
+      <option value="cloudflare_ips">IP تمیز Cloudflare</option>
+      <option value="fastly_ips">IP تمیز Fastly</option>
+      <option value="cloudflare_subdomains">ساب‌دامنه Cloudflare</option>
+      <option value="fastly_subdomains">ساب‌دامنه Fastly</option>
+    </select>
+    <button onclick="fetchData()">نمایش</button>
+  </div>
+  <div id="list"></div>
 
   <script>
-    async function fetchIPs() {
+    async function fetchData() {
+      const dataType = document.getElementById('dataType').value;
+      const listDiv = document.getElementById('list');
+      listDiv.innerHTML = '';
+
+      if (!dataType) {
+        listDiv.textContent = 'لطفاً یک گزینه انتخاب کنید';
+        return;
+      }
+
       try {
-        const response = await fetch('https://ipcloudflaretamiz.hosting-ip.com/www/ips.json', {
-          mode: 'cors'
-        });
+        let url = '';
+        let key = '';
+        if (dataType.includes('ips')) {
+          url = 'https://ipcloudflaretamiz.hosting-ip.com/www/ips.json';
+          key = dataType;
+        } else {
+          url = 'https://ipcloudflaretamiz.hosting-ip.com/www/sub.json';
+          key = dataType;
+        }
+
+        const response = await fetch(url, { mode: 'cors' });
         const data = await response.json();
-        const ipList = document.getElementById('ipList');
-        data.ips.forEach(ip => {
-          const ipElement = document.createElement('div');
-          ipElement.className = 'ip';
-          ipElement.textContent = ip;
-          ipList.appendChild(ipElement);
+        const items = data[key] || [];
+
+        if (items.length === 0) {
+          listDiv.textContent = 'داده‌ای یافت نشد';
+          return;
+        }
+
+        items.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'item';
+          itemDiv.innerHTML = `
+            <span class="item-text">${item}</span>
+            <button class="copy-btn" onclick="copyToClipboard('${item}')">کپی</button>
+          `;
+          listDiv.appendChild(itemDiv);
         });
       } catch (error) {
-        console.error('خطا در بارگذاری IPها:', error);
-        document.getElementById('ipList').textContent = 'خطا در بارگذاری داده‌ها';
+        console.error('خطا در بارگذاری داده‌ها:', error);
+        listDiv.textContent = 'خطا در بارگذاری داده‌ها';
       }
     }
 
-    fetchIPs();
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('متن کپی شد: ' + text);
+      }).catch(err => {
+        console.error('خطا در کپی کردن:', err);
+        alert('خطا در کپی کردن');
+      });
+    }
   </script>
 </body>
 </html>
