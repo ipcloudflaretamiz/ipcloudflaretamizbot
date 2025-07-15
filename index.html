@@ -49,14 +49,6 @@
     text-align: center;
   }
 
-  h1 {
-    color: #8a2be2; /* Purple heading */
-    margin-top: 0; /* Reset margin-top as body padding handles it */
-    margin-bottom: 50px; /* Increased margin-bottom for more space */
-    font-size: 2.5rem; /* Slightly larger font size for heading */
-    font-weight: bold;
-  }
-
   #selection {
     display: flex;
     flex-wrap: wrap;
@@ -66,9 +58,17 @@
     gap: 25px; /* Increased gap between select and button */
   }
 
+  h1 {
+    color: #8a2be2; /* Purple heading */
+    margin-top: 0; /* Reset margin-top as body padding handles it */
+    margin-bottom: 50px; /* Increased margin-bottom for more space */
+    font-size: 2.5rem; /* Slightly larger font size for heading */
+    font-weight: bold; /* Bold text for heading */
+  }
+
   select, button {
-    padding: 18px 40px; /* Increased horizontal padding for wider buttons/select */
-    font-size: 1.1rem; /* Slightly larger font size for buttons/select */
+    padding: 10px 50px; /* Reduced height, increased width for a slimmer look */
+    font-size: 1.0rem; /* Reduced font size to match the slimmer design */
     border-radius: 10px; /* Slightly more rounded corners */
     border: 1px solid rgba(138, 43, 226, 0.4); /* More transparent purple border */
     background-color: rgba(46, 46, 74, 0.5); /* More transparent dark background for glassy effect */
@@ -77,6 +77,16 @@
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Ensure text is centered */
+  }
+
+  /* Specific styling for the "Show" button */
+  .show-button {
+    padding: 10px 50px; /* Match with select for a slimmer and wider look */
+    font-size: 1.0rem; /* Match with select */
   }
 
   select:focus, button:focus {
@@ -84,7 +94,7 @@
     box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.6); /* Larger shadow on focus */
   }
 
-  button:hover {
+  .show-button:hover {
     background-color: rgba(138, 43, 226, 0.7); /* More opaque purple on hover */
     color: white;
     transform: translateY(-3px); /* Slightly more pronounced hover effect */
@@ -175,7 +185,7 @@
       margin-bottom: 35px; /* Adjust for smaller screens */
     }
     #selection {
-      flex-direction: column; /* Stack items vertically */
+      flex-direction: column; /* Stack items vertically on small screens */
       gap: 18px; /* Adjust gap for stacked items */
     }
     select, button {
@@ -205,7 +215,6 @@
 </head>
 <body>
 <div class="main-container">
-  <h1>نمایش IPها و ساب‌دامنه‌ها</h1>
   <div id="selection">
     <select id="dataType">
       <option value="">انتخاب کنید</option>
@@ -214,8 +223,9 @@
       <option value="cloudflare_subdomains">ساب‌دامنه Cloudflare</option>
       <option value="fastly_subdomains">ساب‌دامنه Fastly</option>
     </select>
-    <button onclick="fetchData()">نمایش</button>
+    <button class="show-button" onclick="fetchData()">نمایش</button>
   </div>
+  <h1>نمایش IPها و ساب‌دامنه‌ها</h1>
   <div id="list"></div>
 </div>
 
