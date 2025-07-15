@@ -51,14 +51,22 @@
 
   h1 {
     color: #8a2be2; /* Purple heading */
-    margin-bottom: 40px;
+    margin-bottom: 50px; /* Increased margin-bottom for more space */
     font-size: 2.25rem; /* Tailwind text-4xl */
     font-weight: bold;
   }
 
+  #selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px; /* Added margin-bottom for space below selection */
+    gap: 20px; /* Increased gap between select and button */
+  }
+
   select, button {
     padding: 15px 25px;
-    margin: 12px;
     font-size: 1rem;
     border-radius: 8px;
     border: 1px solid #8a2be2; /* Purple border */
@@ -160,10 +168,15 @@
     }
     h1 {
       font-size: 1.75rem; /* Tailwind text-3xl */
+      margin-bottom: 30px; /* Adjust for smaller screens */
+    }
+    #selection {
+      flex-direction: column; /* Stack items vertically */
+      gap: 15px; /* Adjust gap for stacked items */
     }
     select, button {
-      width: calc(100% - 24px); /* Full width minus margin */
-      margin: 12px 0;
+      width: 100%; /* Full width on small screens */
+      margin: 0; /* Remove individual margins when stacked */
     }
     .item {
       flex-direction: column; /* Stack text and button on small screens */
@@ -184,15 +197,15 @@
 <body>
 <div class="main-container">
   <h1>نمایش IPها و ساب‌دامنه‌ها</h1>
-  <div id="selection" class="flex flex-wrap justify-center items-center mb-6">
-    <select id="dataType" class="block w-full md:w-auto">
+  <div id="selection">
+    <select id="dataType">
       <option value="">انتخاب کنید</option>
       <option value="cloudflare_ips">IP تمیز Cloudflare</option>
       <option value="fastly_ips">IP تمیز Fastly</option>
       <option value="cloudflare_subdomains">ساب‌دامنه Cloudflare</option>
       <option value="fastly_subdomains">ساب‌دامنه Fastly</option>
     </select>
-    <button onclick="fetchData()" class="block w-full md:w-auto">نمایش</button>
+    <button onclick="fetchData()">نمایش</button>
   </div>
   <div id="list"></div>
 </div>
