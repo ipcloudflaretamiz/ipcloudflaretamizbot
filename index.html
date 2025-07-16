@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نمایش IPها و ساب‌دامنه‌ها</title>
+<title>IP Display Tool</title>
 <!-- Tailwind CSS CDN for responsive design and utility classes -->
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -26,134 +26,226 @@
   body {
     font-family: "Vazirmatn", sans-serif;
     direction: rtl;
-    background-color: #1a1a2e; /* Dark background */
-    color: #e0e0e0; /* Light text */
+    /* Enhanced gradient background for better glassmorphism */
+    background: linear-gradient(135deg, 
+      #1a1a2e 0%, 
+      #16213e 25%, 
+      #0f3460 50%, 
+      #533483 75%, 
+      #7209b7 100%);
+    background-attachment: fixed;
+    color: #e0e0e0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 40px 20px; /* Increased padding-top for more space from the top */
+    padding: 40px 20px;
     box-sizing: border-box;
+    position: relative;
   }
 
-  /* Main container styling with blur effect */
+  /* Add floating particles for enhanced glass effect */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Enhanced main container with better glassmorphism */
   .main-container {
-    background-color: rgba(30, 30, 46, 0.7); /* Semi-transparent dark purple */
-    backdrop-filter: blur(18px); /* Increased blur for main container */
-    border: 1px solid rgba(138, 43, 226, 0.3); /* Subtle purple border */
-    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05); /* More transparent for better glass effect */
+    backdrop-filter: blur(25px) saturate(180%); /* Enhanced blur and saturation */
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Lighter border for glass effect */
+    border-radius: 20px; /* More rounded corners */
     padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Inner highlight for glass effect */
     max-width: 600px;
     width: 100%;
     text-align: center;
+    position: relative;
   }
 
-  #selection {
+  /* Button container for vertical layout */
+  .button-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px; /* Added margin-bottom for space below selection */
-    gap: 25px; /* Increased gap between select and button */
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-top: 20px;
   }
 
-  h1 {
-    color: #8a2be2; /* Purple heading */
-    margin-top: 0; /* Reset margin-top as body padding handles it */
-    margin-bottom: 50px; /* Increased margin-bottom for more space */
-    font-size: 2.5rem; /* Slightly larger font size for heading */
-    font-weight: bold; /* Bold text for heading */
+  /* Enhanced glassmorphism for main menu buttons */
+  .menu-button {
+    padding: 18px 35px; /* Slightly larger padding */
+    font-size: 1.1rem;
+    border-radius: 30px; /* More rounded */
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Subtle glass border */
+    background: rgba(255, 255, 255, 0.08); /* More transparent */
+    backdrop-filter: blur(20px) saturate(150%); /* Enhanced blur */
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
+    outline: none;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  select, button {
-    padding: 10px 50px; /* Reduced height, increased width for a slimmer look */
-    font-size: 1.0rem; /* Reduced font size to match the slimmer design */
-    border-radius: 10px; /* Slightly more rounded corners */
-    border: 1px solid rgba(138, 43, 226, 0.4); /* More transparent purple border */
-    background-color: rgba(46, 46, 74, 0.5); /* More transparent dark background for glassy effect */
-    backdrop-filter: blur(10px); /* Increased blur for buttons */
-    color: #e0e0e0;
+  /* Glass shine effect */
+  .menu-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
+  .menu-button:hover::before {
+    left: 100%;
+  }
+
+  .menu-button:hover {
+    background: rgba(255, 255, 255, 0.15); /* More opaque on hover */
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px) scale(1.02); /* Enhanced hover effect */
+    box-shadow: 
+      0 8px 30px rgba(138, 43, 226, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .menu-button:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      0 0 0 4px rgba(138, 43, 226, 0.3),
+      0 8px 30px rgba(138, 43, 226, 0.2);
+  }
+
+  /* Enhanced back button styling */
+  .back-button {
+    padding: 14px 28px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(138, 43, 226, 0.15);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    color: #ffffff;
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* Ensure text is centered */
+    margin-bottom: 20px;
+    display: none;
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  /* Specific styling for the "Show" button */
-  .show-button {
-    padding: 10px 50px; /* Match with select for a slimmer and wider look */
-    font-size: 1.0rem; /* Match with select */
+  .back-button:hover {
+    background: rgba(138, 43, 226, 0.25);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 
+      0 6px 20px rgba(138, 43, 226, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
-  select:focus, button:focus {
-    border-color: #a052f2; /* Lighter purple on focus */
-    box-shadow: 0 0 0 4px rgba(138, 43, 226, 0.6); /* Larger shadow on focus */
-  }
-
-  .show-button:hover {
-    background-color: rgba(138, 43, 226, 0.7); /* More opaque purple on hover */
-    color: white;
-    transform: translateY(-3px); /* Slightly more pronounced hover effect */
+  .back-button.show {
+    display: inline-block;
   }
 
   #list {
     margin-top: 30px;
   }
 
+  /* Enhanced glassmorphism for list items */
   .item {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between text and button */
-    padding: 18px; /* Increased padding for list items */
-    background-color: rgba(46, 46, 74, 0.7); /* Slightly lighter dark for items, more transparent */
-    border: 1px solid rgba(138, 43, 226, 0.4); /* More transparent purple border */
-    border-radius: 12px; /* Slightly more rounded corners */
-    margin-bottom: 15px; /* Increased margin between items */
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4); /* Larger shadow */
-    transition: transform 0.2s ease;
+    justify-content: space-between;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(15px) saturate(120%);
+    -webkit-backdrop-filter: blur(15px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
   }
 
   .item:hover {
-    transform: translateY(-4px); /* Slightly more pronounced hover effect */
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .item-text {
     flex-grow: 1;
     text-align: right;
-    padding-left: 20px; /* More space for the button */
-    word-break: break-all; /* Ensure long text wraps */
-    font-size: 1.05rem; /* Slightly larger text in items */
+    padding-left: 20px;
+    word-break: break-all;
+    font-size: 1.05rem;
+    color: #ffffff;
   }
 
+  /* Enhanced copy button */
   .copy-btn {
-    padding: 10px 18px; /* Increased padding for copy buttons */
-    background-color: rgba(138, 43, 226, 0.6); /* More transparent purple background for glassy effect */
-    backdrop-filter: blur(8px); /* Increased blur for copy buttons */
+    padding: 12px 20px;
+    background: rgba(138, 43, 226, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: white;
-    border: none;
-    border-radius: 8px; /* Slightly more rounded corners */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    flex-shrink: 0; /* Prevent button from shrinking */
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    box-shadow: 
+      0 2px 10px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .copy-btn:hover {
-    background-color: rgba(160, 82, 242, 0.8); /* More opaque lighter purple on hover */
-    transform: scale(1.08); /* Slightly more pronounced hover effect */
+    background: rgba(138, 43, 226, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+    box-shadow: 
+      0 4px 15px rgba(138, 43, 226, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
-  /* Custom Toast Notification */
+  /* Enhanced toast notification */
   .toast-container {
     position: fixed;
-    bottom: 30px; /* Slightly higher from bottom */
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    display: none; /* Hidden by default */
+    display: none;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
@@ -164,68 +256,68 @@
   }
 
   .toast-message {
-    background-color: rgba(30, 30, 46, 0.8); /* More transparent dark background */
-    backdrop-filter: blur(15px); /* Increased blur for toast */
-    border: 1px solid #8a2be2; /* Purple border */
-    color: #e0e0e0;
-    padding: 18px 30px; /* Increased padding for toast */
-    border-radius: 12px; /* Slightly more rounded corners */
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); /* Larger shadow */
-    font-size: 1.2rem; /* Slightly larger font size for toast message */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 18px 30px;
+    border-radius: 15px;
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    font-size: 1.1rem;
     text-align: center;
+  }
+
+  /* Hide/show sections */
+  .hidden {
+    display: none;
   }
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .main-container {
-      padding: 25px; /* Adjusted padding for smaller screens */
+      padding: 25px;
+      border-radius: 15px;
     }
-    h1 {
-      font-size: 2rem; /* Tailwind text-3xl */
-      margin-bottom: 35px; /* Adjust for smaller screens */
-    }
-    #selection {
-      flex-direction: column; /* Stack items vertically on small screens */
-      gap: 18px; /* Adjust gap for stacked items */
-    }
-    select, button {
-      width: 100%; /* Full width on small screens */
-      margin: 0; /* Remove individual margins when stacked */
-      padding: 15px 25px; /* Slightly smaller padding on mobile */
-      font-size: 1rem; /* Slightly smaller font on mobile */
+    .menu-button {
+      padding: 15px 25px;
+      font-size: 1rem;
+      border-radius: 25px;
     }
     .item {
-      flex-direction: column; /* Stack text and button on small screens */
-      align-items: flex-end; /* Align text to the right */
-      padding: 15px; /* Adjusted padding for items on mobile */
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 15px;
     }
     .item-text {
       width: 100%;
       text-align: right;
       margin-bottom: 10px;
       padding-left: 0;
-      font-size: 1rem; /* Adjusted font size on mobile */
+      font-size: 1rem;
     }
     .copy-btn {
       width: 100%;
-      padding: 8px 15px; /* Adjusted padding for copy buttons on mobile */
+      padding: 10px 15px;
     }
   }
 </style>
 </head>
 <body>
 <div class="main-container">
-  <div id="selection">
-    <select id="dataType">
-      <option value="">انتخاب کنید</option>
-      <option value="cloudflare_ips">IP تمیز Cloudflare</option>
-      <option value="fastly_ips">IP تمیز Fastly</option>
-      <option value="cloudflare_subdomains">ساب‌دامنه Cloudflare</option>
-      <option value="fastly_subdomains">ساب‌دامنه Fastly</option>
-    </select>
-    <button class="show-button" onclick="fetchData()">نمایش</button>
+  <!-- Back button (hidden by default) -->
+  <button class="back-button" id="backButton" onclick="showMainMenu()">← برگشت</button>
+  
+  <!-- Main menu buttons -->
+  <div class="button-container" id="mainMenu">
+    <button class="menu-button" onclick="fetchData('cloudflare_ips')">IP تمیز Cloudflare</button>
+    <button class="menu-button" onclick="fetchData('fastly_ips')">IP تمیز Fastly</button>
+    <button class="menu-button" onclick="fetchData('cloudflare_subdomains')">ساب‌دامنه Cloudflare</button>
+    <button class="menu-button" onclick="fetchData('fastly_subdomains')">ساب‌دامنه Fastly</button>
   </div>
-  <h1>نمایش IPها و ساب‌دامنه‌ها</h1>
+  
   <div id="list"></div>
 </div>
 
@@ -246,31 +338,42 @@
     }, 3000); // Hide after 3 seconds
   }
 
-  async function fetchData() {
-    const dataType = document.getElementById('dataType').value;
+  // Function to show main menu and hide back button
+  function showMainMenu() {
+    document.getElementById('mainMenu').classList.remove('hidden');
+    document.getElementById('backButton').classList.remove('show');
+    document.getElementById('list').innerHTML = '';
+  }
+
+  // Function to hide main menu and show back button
+  function hideMainMenu() {
+    document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('backButton').classList.add('show');
+  }
+
+  async function fetchData(dataType) {
     const listDiv = document.getElementById('list');
     listDiv.innerHTML = ''; // Clear previous list
-    if (!dataType) {
-      listDiv.textContent = 'لطفاً یک گزینه انتخاب کنید';
-      return;
-    }
+    
+    // Hide main menu and show back button
+    hideMainMenu();
 
     try {
       let url = '';
-      let key = '';
+      let key = dataType;
+      
       if (dataType.includes('ips')) {
         url = 'https://ipcloudflaretamiz.hosting-ip.com/www/ips.json';
-        key = dataType;
       } else {
         url = 'https://ipcloudflaretamiz.hosting-ip.com/www/sub.json';
-        key = dataType;
       }
 
       const response = await fetch(url, { mode: 'cors' });
       if (!response.ok) throw new Error('خطا در دریافت داده‌ها');
+      
       const data = await response.json();
       const items = data[key] || [];
-
+      
       if (items.length === 0) {
         listDiv.textContent = 'داده‌ای یافت نشد';
         return;
