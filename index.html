@@ -56,15 +56,15 @@
 
   /* Enhanced main container with better glassmorphism */
   .main-container {
-    background: rgba(255, 255, 255, 0.05); /* More transparent for better glass effect */
-    backdrop-filter: blur(25px) saturate(180%); /* Enhanced blur and saturation */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Lighter border for glass effect */
-    border-radius: 20px; /* More rounded corners */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
     padding: 40px;
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Inner highlight for glass effect */
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
     max-width: 600px;
     width: 100%;
     text-align: center;
@@ -82,16 +82,16 @@
 
   /* Enhanced glassmorphism for main menu buttons */
   .menu-button {
-    padding: 18px 35px; /* Slightly larger padding */
+    padding: 18px 35px;
     font-size: 1.1rem;
-    border-radius: 30px; /* More rounded */
-    border: 1px solid rgba(255, 255, 255, 0.15); /* Subtle glass border */
-    background: rgba(255, 255, 255, 0.08); /* More transparent */
-    backdrop-filter: blur(20px) saturate(150%); /* Enhanced blur */
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     color: #ffffff;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother transition */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
     text-align: center;
     width: 100%;
@@ -114,14 +114,16 @@
     transition: left 0.6s;
   }
 
-  .menu-button:hover::before {
+  .menu-button:hover::before,
+  .menu-button.active::before {
     left: 100%;
   }
 
-  .menu-button:hover {
-    background: rgba(255, 255, 255, 0.15); /* More opaque on hover */
+  .menu-button:hover,
+  .menu-button.active {
+    background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-5px) scale(1.02); /* Enhanced hover effect */
+    transform: translateY(-5px) scale(1.02);
     box-shadow: 
       0 8px 30px rgba(138, 43, 226, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -154,7 +156,8 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  .back-button:hover {
+  .back-button:hover,
+  .back-button.active {
     background: rgba(138, 43, 226, 0.25);
     border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-3px);
@@ -224,7 +227,8 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  .copy-btn:hover {
+  .copy-btn:hover,
+  .copy-btn.active {
     background: rgba(138, 43, 226, 0.5);
     border-color: rgba(255, 255, 255, 0.3);
     transform: scale(1.05);
@@ -383,6 +387,18 @@
         `;
         listDiv.appendChild(itemDiv);
       });
+
+      // Add touch event listeners to copy buttons
+      document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('touchstart', () => {
+          button.classList.add('active');
+        });
+        button.addEventListener('touchend', () => {
+          setTimeout(() => {
+            button.classList.remove('active');
+          }, 300); // Remove active class after 300ms to mimic hover duration
+        });
+      });
     } catch (error) {
       console.error('خطا:', error);
       listDiv.textContent = 'خطا در بارگذاری داده‌ها. لطفاً مطمئن شوید سرور CORS را پشتیبانی می‌کند.';
@@ -418,6 +434,18 @@
       document.body.removeChild(tempInput);
     }
   }
+
+  // Add touch event listeners to menu buttons and back button
+  document.querySelectorAll('.menu-button, .back-button').forEach(button => {
+    button.addEventListener('touchstart', () => {
+      button.classList.add('active');
+    });
+    button.addEventListener('touchend', () => {
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 300); // Remove active class after 300ms to mimic hover duration
+    });
+  });
 </script>
 </body>
 </html>
