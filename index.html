@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IP Display Tool</title>
-<!-- Tailwind CSS CDN for responsive design and utility classes -->
+
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {
@@ -259,10 +259,8 @@
 </head>
 <body>
 <div class="main-container">
-  <!-- Back button (hidden by default) -->
   <button class="back-button" id="backButton" onclick="showMainMenu()">← برگشت</button>
   
-  <!-- Main menu buttons -->
   <div class="button-container" id="mainMenu">
     <button class="menu-button" onclick="fetchData('cloudflare_ips')">آیپی تمیز کلودفلر
     <button class="menu-button" onclick="fetchData('fastly_ips')">آیپی تمیز فستلی
@@ -273,13 +271,11 @@
   <div id="list"></div>
 </div>
 
-<!-- Custom Toast Notification HTML -->
 <div id="customToast" class="toast-container" aria-live="polite" aria-atomic="true">
   <div class="toast-message"></div>
 </div>
 
 <script>
-  // Function to show the custom toast
   function showToast(message) {
     const toast = document.getElementById('customToast');
     const toastMessage = toast.querySelector('.toast-message');
@@ -287,17 +283,15 @@
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
-    }, 3000); // Hide after 3 seconds
+    }, 3000); 
   }
 
-  // Function to show main menu and hide back button
   function showMainMenu() {
     document.getElementById('mainMenu').classList.remove('hidden');
     document.getElementById('backButton').classList.remove('show');
     document.getElementById('list').innerHTML = '';
   }
 
-  // Function to hide main menu and show back button
   function hideMainMenu() {
     document.getElementById('mainMenu').classList.add('hidden');
     document.getElementById('backButton').classList.add('show');
@@ -305,9 +299,8 @@
 
   async function fetchData(dataType) {
     const listDiv = document.getElementById('list');
-    listDiv.innerHTML = ''; // Clear previous list
+    listDiv.innerHTML = ''; 
     
-    // Hide main menu and show back button
     hideMainMenu();
 
     try {
@@ -341,7 +334,6 @@
         listDiv.appendChild(itemDiv);
       });
 
-      // Add touch event listeners to copy buttons
       document.querySelectorAll('.copy-btn').forEach(button => {
         button.addEventListener('touchstart', () => {
           button.classList.add('active');
@@ -349,7 +341,7 @@
         button.addEventListener('touchend', () => {
           setTimeout(() => {
             button.classList.remove('active');
-          }, 300); // Remove active class after 300ms
+          }, 300); 
         });
       });
     } catch (error) {
@@ -388,7 +380,7 @@
     }
   }
 
-  // Add touch event listeners to menu buttons and back button
+
   document.querySelectorAll('.menu-button, .back-button').forEach(button => {
     button.addEventListener('touchstart', () => {
       button.classList.add('active');
@@ -396,7 +388,7 @@
     button.addEventListener('touchend', () => {
       setTimeout(() => {
         button.classList.remove('active');
-      }, 300); // Remove active class after 300ms
+      }, 300); 
     });
   });
 </script>
