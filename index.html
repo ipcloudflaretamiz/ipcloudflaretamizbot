@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IP Display Tool</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root {
     --primary-color: #9c27b0;
     --primary-light: #bb86fc;
     --primary-dark: #6a0dad;
+    --secondary-orange: #ff6b00;
+    --secondary-red: #e53e3e;
     --background-dark: #121212;
     --surface-dark: #1e1e1e;
     --text-primary: #ffffff;
@@ -18,14 +19,12 @@
     --error-color: #cf6679;
     --success-color: #03dac6;
   }
-
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Vazirmatn", "Tahoma", sans-serif;
   }
-
   @font-face {
     font-family: "Vazirmatn";
     src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Regular.woff2") format("woff2");
@@ -33,7 +32,6 @@
     font-style: normal;
     font-display: swap;
   }
-
   @font-face {
     font-family: "Vazirmatn";
     src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2") format("woff2");
@@ -41,7 +39,6 @@
     font-style: normal;
     font-display: swap;
   }
-
   body {
     background-color: var(--background-dark);
     color: var(--text-primary);
@@ -51,12 +48,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: radial-gradient(circle at 10% 20%, rgba(156, 39, 176, 0.3) 0%, transparent 30%), 
+    background-image: radial-gradient(circle at 10% 20%, rgba(156, 39, 176, 0.3) 0%, transparent 30%),
                       radial-gradient(circle at 90% 80%, rgba(106, 13, 173, 0.3) 0%, transparent 30%);
     background-attachment: fixed;
     padding: 1rem;
   }
-
   .main-container {
     width: 90%;
     max-width: 600px;
@@ -70,7 +66,6 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
   }
-
   .button-container {
     display: flex;
     flex-direction: column;
@@ -78,7 +73,6 @@
     margin-bottom: 1.5rem;
     margin-top: 1rem;
   }
-
   .menu-button {
     background: var(--primary-color);
     color: var(--text-primary);
@@ -91,14 +85,50 @@
     transition: all 0.3s ease;
     width: 100%;
   }
-
   .menu-button:hover,
   .menu-button.active {
     background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
   }
-
+  .submenu-button-cloudflare {
+    background: var(--secondary-orange);
+    color: var(--text-primary);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .submenu-button-cloudflare:hover,
+  .submenu-button-cloudflare.active {
+    background: #d45800;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.3);
+  }
+  .submenu-button-fastly {
+    background: var(--secondary-red);
+    color: var(--text-primary);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .submenu-button-fastly:hover,
+  .submenu-button-fastly.active {
+    background: #b52f2f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(229, 58, 58, 0.3);
+  }
   .back-button {
     background: var(--primary-color);
     color: var(--text-primary);
@@ -112,22 +142,30 @@
     margin-bottom: 1rem;
     display: none;
   }
-
   .back-button:hover,
   .back-button.active {
     background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
   }
-
   .back-button.show {
     display: inline-block;
   }
-
+  #donationSubMenu {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  #donationSubMenu.show {
+    display: flex;
+  }
   #list {
     margin-top: 1.5rem;
   }
-
   .item {
     display: flex;
     align-items: center;
@@ -139,13 +177,11 @@
     margin-bottom: 1rem;
     transition: all 0.3s ease;
   }
-
   .item:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
-
   .item-text {
     flex-grow: 1;
     text-align: right;
@@ -154,7 +190,6 @@
     font-size: 1rem;
     color: var(--text-primary);
   }
-
   .copy-btn {
     background: var(--primary-color);
     color: var(--text-primary);
@@ -166,14 +201,12 @@
     transition: all 0.3s ease;
     flex-shrink: 0;
   }
-
   .copy-btn:hover,
   .copy-btn.active {
     background: var(--primary-dark);
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
   }
-
   .toast-container {
     position: fixed;
     bottom: 30px;
@@ -184,12 +217,10 @@
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
-
   .toast-container.show {
     display: block;
     opacity: 1;
   }
-
   .toast-message {
     background: rgba(3, 218, 198, 0.2);
     border-left: 4px solid var(--success-color);
@@ -200,43 +231,56 @@
     font-size: 1rem;
     text-align: center;
   }
-
   .hidden {
-    display: none;
+    display: none !important;
   }
-
+  .city-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    text-align: right;
+  }
+  .city-item {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .loading-placeholder {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+  }
   @media (max-width: 768px) {
     .main-container {
       width: 95%;
       padding: 1.5rem;
       border-radius: 12px;
     }
-
     .menu-button,
+    .submenu-button-cloudflare,
+    .submenu-button-fastly,
     .back-button {
       padding: 0.7rem;
       font-size: 0.9rem;
     }
-
     .item {
       flex-direction: column;
       align-items: flex-end;
       padding: 0.8rem;
     }
-
     .item-text {
       width: 100%;
       padding-left: 0;
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
     }
-
     .copy-btn {
       width: 100%;
       padding: 0.6rem;
     }
   }
-
   @media (max-width: 480px) {
     .main-container {
       width: 100%;
@@ -244,13 +288,13 @@
       margin: 1rem;
       border-radius: 10px;
     }
-
     .menu-button,
+    .submenu-button-cloudflare,
+    .submenu-button-fastly,
     .back-button {
       padding: 0.6rem;
       font-size: 0.8rem;
     }
-
     .item-text {
       font-size: 0.8rem;
     }
@@ -260,22 +304,197 @@
 <body>
 <div class="main-container">
   <button class="back-button" id="backButton" onclick="showMainMenu()">← برگشت</button>
-  
   <div class="button-container" id="mainMenu">
-    <button class="menu-button" onclick="fetchData('cloudflare_ips')">آیپی تمیز کلودفلر
-    <button class="menu-button" onclick="fetchData('fastly_ips')">آیپی تمیز فستلی
-    <button class="menu-button" onclick="fetchData('cloudflare_subdomains')">ساب دامنه کلودفلر
-    <button class="menu-button" onclick="fetchData('fastly_subdomains')">ساب دامنه فستلی
+    <button class="menu-button" onclick="fetchData('cloudflare_ips')">آیپی تمیز کلودفلر</button>
+    <button class="menu-button" onclick="fetchData('fastly_ips')">آیپی تمیز فستلی</button>
+    <button class="menu-button" onclick="fetchData('cloudflare_subdomains')">ساب دامنه کلودفلر</button>
+    <button class="menu-button" onclick="fetchData('fastly_subdomains')">ساب دامنه فستلی</button>
+    <button class="menu-button" onclick="showDonationSubMenu()">آیپی تمیز اهدایی</button>
   </div>
-  
+  <div id="donationSubMenu">
+    <button class="submenu-button-cloudflare" onclick="fetchDonationData('cloudflare_donation_ips')">آیپی تمیز اهدایی کلودفلر</button>
+    <button class="submenu-button-fastly" onclick="fetchDonationData('fastly_donation_ips')">آیپی تمیز اهدایی فستلی</button>
+  </div>
+ 
   <div id="list"></div>
 </div>
-
 <div id="customToast" class="toast-container" aria-live="polite" aria-atomic="true">
   <div class="toast-message"></div>
 </div>
-
 <script>
+  let fetchController = null; 
+
+  function getUncachedUrl(baseUrl) {
+    const timestamp = new Date().getTime();
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${separator}t=${timestamp}`;
+  }
+  async function getIpInfo(ip, signal) {
+    const url = `https://ipcloudflaretamiz.hosting-ip.com/proxy.php?ip=${encodeURIComponent(ip)}`;
+   
+    try {
+        const response = await fetch(url, { mode: 'cors', signal });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`HTTP ${response.status}: ${errorData.error || 'خطا در دریافت اطلاعات'}`);
+        }
+       
+        const data = await response.json();
+        return data[0] || data; 
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            console.log('Fetch aborted for IP:', ip);
+            return null;
+        }
+        console.error('خطا در دریافت اطلاعات:', error);
+        return {
+            ip: ip,
+            country_name_en: 'Unknown',
+            country_name_fa: 'نامشخص',
+            org: 'خطا در بارگذاری',
+            ping_status: 'failed',
+            ping_time: null,
+            country_pinged: 'نامشخص',
+            ping_city_results: {},
+            handshake_error: error.message // 
+        };
+    }
+  }
+  function displaySingleIp(ipInfo, listContainer) {
+    if (!ipInfo) return; 
+    
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item';
+   
+    let pingText = 'پینگ ناموفق';
+    let pingColor = 'var(--error-color)';
+    if (ipInfo.ping_status === 'success') {
+      pingText = `زمان پینگ کلی از ${ipInfo.country_pinged}: ${ipInfo.ping_time} ms`;
+      pingColor = 'var(--success-color)';
+    }
+   
+    let cityListHtml = '<ul class="city-list">';
+    for (const [city, result] of Object.entries(ipInfo.ping_city_results || {})) {
+      let cityStatus = result.status === 'success' ? 'موفق' : 'ناموفق';
+      let cityTime = result.status === 'success' ? ` (${result.time} ms)` : '';
+      let cityColor = result.status === 'success' ? 'var(--success-color)' : 'var(--error-color)';
+      cityListHtml += `<li class="city-item" style="color: ${cityColor};">${city}: ${cityStatus}${cityTime}</li>`;
+    }
+    cityListHtml += '</ul>';
+   
+    const textContent = `
+      <span class="item-text">
+        ${ipInfo.ip}<br>
+        <small style="color: var(--text-secondary);">کشور: ${ipInfo.country_name_fa || 'نامشخص'}</small><br>
+        <small style="color: ${pingColor};">${pingText}</small>
+        ${cityListHtml}
+      </span>
+      <button class="copy-btn" onclick="copyToClipboard('${ipInfo.ip}')">کپی</button>
+    `;
+   
+    itemDiv.innerHTML = textContent;
+    listContainer.appendChild(itemDiv);
+  }
+  async function fetchData(dataType) {
+    const listDiv = document.getElementById('list');
+    listDiv.innerHTML = '<div class="loading-placeholder">در حال بارگزاری اطلاعات IPها...</div>';
+    hideMainMenu();
+    fetchController = new AbortController();
+    const signal = fetchController.signal;
+    
+    try {
+      let url = '';
+      let key = dataType;
+      if (dataType.includes('ips')) {
+        url = getUncachedUrl('https://ipcloudflaretamiz.hosting-ip.com/www/ips.json');
+      } else {
+        url = getUncachedUrl('https://ipcloudflaretamiz.hosting-ip.com/www/sub.json');
+      }
+      const response = await fetch(url, { mode: 'cors', signal });
+      if (!response.ok) throw new Error('خطا در دریافت داده‌ها');
+      const data = await response.json();
+      let items = data[key] || [];
+      if (items.length === 0) {
+        listDiv.textContent = 'داده‌ای یافت نشد';
+        return;
+      }
+      if (dataType.includes('ips')) {
+        const promises = items.map(ip => getIpInfo(ip, signal).then(info => ({ip, info})));
+        let results = await Promise.all(promises);
+        results = results.filter(result => result.info !== null); 
+        
+        results.sort((a, b) => {
+          const timeA = a.info.ping_time ?? Infinity;
+          const timeB = b.info.ping_time ?? Infinity;
+          return timeA - timeB;
+        });
+        
+        listDiv.innerHTML = '';
+        results.forEach(result => displaySingleIp(result.info, listDiv));
+      } else {
+        listDiv.innerHTML = '';
+        for (const item of items) {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'item';
+          itemDiv.innerHTML = `
+            <span class="item-text">${item}</span>
+            <button class="copy-btn" onclick="copyToClipboard('${item}')">کپی</button>
+          `;
+          listDiv.appendChild(itemDiv);
+        }
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('خطا:', error);
+        listDiv.textContent = 'خطا در بارگذاری داده‌ها.';
+        showToast('خطا در بارگذاری داده‌ها.');
+      }
+    }
+  }
+  async function fetchDonationData(dataType) {
+    const listDiv = document.getElementById('list');
+    listDiv.innerHTML = '<div class="loading-placeholder">در حال بارگزاری اطلاعات IPها...</div>';
+    document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('donationSubMenu').classList.remove('show');
+    document.getElementById('backButton').classList.add('show');
+    fetchController = new AbortController();
+    const signal = fetchController.signal;
+    
+    try {
+      const url = getUncachedUrl('https://ipcloudflaretamiz.hosting-ip.com/www/donation.json');
+      const response = await fetch(url, { mode: 'cors', signal });
+      if (!response.ok) throw new Error('خطا در دریافت داده‌های اهدایی');
+      const data = await response.json();
+      let items = data[dataType] || [];
+      if (items.length === 0) {
+        listDiv.textContent = 'داده‌ای یافت نشد';
+        return;
+      }
+      const promises = items.map(ip => getIpInfo(ip, signal).then(info => ({ip, info})));
+      let results = await Promise.all(promises);
+      results = results.filter(result => result.info !== null); 
+      
+      results.sort((a, b) => {
+        const timeA = a.info.ping_time ?? Infinity;
+        const timeB = b.info.ping_time ?? Infinity;
+        return timeA - timeB;
+      });
+      
+      listDiv.innerHTML = '';
+      results.forEach(result => displaySingleIp(result.info, listDiv));
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('خطا:', error);
+        listDiv.textContent = 'خطا در بارگذاری داده‌های اهدایی.';
+        showToast('خطا در بارگذاری داده‌های اهدایی.');
+      }
+    }
+  }
+  function showDonationSubMenu() {
+    document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('donationSubMenu').classList.add('show');
+    document.getElementById('backButton').classList.add('show');
+  }
   function showToast(message) {
     const toast = document.getElementById('customToast');
     const toastMessage = toast.querySelector('.toast-message');
@@ -283,74 +502,23 @@
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
-    }, 3000); 
+    }, 3000);
   }
-
   function showMainMenu() {
+    if (fetchController) {
+      fetchController.abort(); 
+      fetchController = null;
+    }
     document.getElementById('mainMenu').classList.remove('hidden');
+    document.getElementById('donationSubMenu').classList.remove('show');
     document.getElementById('backButton').classList.remove('show');
     document.getElementById('list').innerHTML = '';
   }
-
   function hideMainMenu() {
     document.getElementById('mainMenu').classList.add('hidden');
+    document.getElementById('donationSubMenu').classList.remove('show');
     document.getElementById('backButton').classList.add('show');
   }
-
-  async function fetchData(dataType) {
-    const listDiv = document.getElementById('list');
-    listDiv.innerHTML = ''; 
-    
-    hideMainMenu();
-
-    try {
-      let url = '';
-      let key = dataType;
-      
-      if (dataType.includes('ips')) {
-        url = 'https://ipcloudflaretamiz.hosting-ip.com/www/ips.json';
-      } else {
-        url = 'https://ipcloudflaretamiz.hosting-ip.com/www/sub.json';
-      }
-
-      const response = await fetch(url, { mode: 'cors' });
-      if (!response.ok) throw new Error('خطا در دریافت داده‌ها');
-      
-      const data = await response.json();
-      const items = data[key] || [];
-      
-      if (items.length === 0) {
-        listDiv.textContent = 'داده‌ای یافت نشد';
-        return;
-      }
-
-      items.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'item';
-        itemDiv.innerHTML = `
-          <span class="item-text">${item}</span>
-          <button class="copy-btn" onclick="copyToClipboard('${item}')">کپی</button>
-        `;
-        listDiv.appendChild(itemDiv);
-      });
-
-      document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('touchstart', () => {
-          button.classList.add('active');
-        });
-        button.addEventListener('touchend', () => {
-          setTimeout(() => {
-            button.classList.remove('active');
-          }, 300); 
-        });
-      });
-    } catch (error) {
-      console.error('خطا:', error);
-      listDiv.textContent = 'خطا در بارگذاری داده‌ها. لطفاً مطمئن شوید سرور CORS را پشتیبانی می‌کند.';
-      showToast('خطا در بارگذاری داده‌ها.');
-    }
-  }
-
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(() => {
@@ -363,7 +531,6 @@
       fallbackCopyTextToClipboard(text);
     }
   }
-
   function fallbackCopyTextToClipboard(text) {
     const tempInput = document.createElement('input');
     tempInput.value = text;
@@ -379,16 +546,14 @@
       document.body.removeChild(tempInput);
     }
   }
-
-
-  document.querySelectorAll('.menu-button, .back-button').forEach(button => {
+  document.querySelectorAll('.menu-button, .submenu-button-cloudflare, .submenu-button-fastly, .back-button').forEach(button => {
     button.addEventListener('touchstart', () => {
       button.classList.add('active');
     });
     button.addEventListener('touchend', () => {
       setTimeout(() => {
         button.classList.remove('active');
-      }, 300); 
+      }, 300);
     });
   });
 </script>
